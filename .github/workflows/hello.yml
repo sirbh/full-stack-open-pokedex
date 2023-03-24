@@ -16,4 +16,4 @@ jobs:
       - name: Show Date
         run: date
       - name: List Folders
-        run: ls
+        run: ls -l
