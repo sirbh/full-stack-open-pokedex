@@ -44,8 +44,8 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - name: Bump version and push tag
+      - uses: actions/checkout@v3
         if: ${{ github.event_name == 'push' || github.event_name == 'merge' }}
-        uses: actions/checkout@v3
         uses: anothrNick/github-tag-action@1.61.0
         env:
           GITHUB_TOKEN: ${{ secrets.GHUB_TOKEN }}
