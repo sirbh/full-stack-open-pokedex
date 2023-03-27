@@ -48,4 +48,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GHUB_TOKEN }}
           DEFAULT_BUMP: patch
-          DRY_RUN: true
