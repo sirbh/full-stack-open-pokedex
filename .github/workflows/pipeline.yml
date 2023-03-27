@@ -42,11 +42,12 @@ jobs:
     permissions: write-all
     needs: [simple_deployment_pipeline]
     runs-on: ubuntu-20.04
-    if: ${{ github.event_name == 'push' }}
     steps:
-      - uses: actions/checkout@v3
       - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@1.61.0 # https://github.com/anothrNick/github-tag-action
+        if: ${{ github.event_name == 'push' || github.event_name == 'merge' }}
+        uses: actions/checkout@v3
+        uses: anothrNick/github-tag-action@1.61.0
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # https://docs.github.com/en/actions/security-guides/automatic-token-authentication
+          GITHUB_TOKEN: ${{ secrets.GHUB_TOKEN }}
           DEFAULT_BUMP: patch
+          WITH_V: true
