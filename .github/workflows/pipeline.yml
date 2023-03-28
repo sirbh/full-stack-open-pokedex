@@ -31,22 +31,27 @@ jobs:
           command: npm run test:e2e
           start: npm run start-prod
           wait-on: http://localhost:5000
-      - uses: actions/checkout@v3
-      - uses: superfly/flyctl-actions/setup-flyctl@master
-      - name: Deploy
-        if: ${{ github.event_name == 'push' || github.event_name == 'merge' }}
-        run: flyctl deploy --remote-only
-        env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-  tag_release:
+      
+  deploy_and_tag_release:
     permissions: write-all
     needs: [simple_deployment_pipeline]
     runs-on: ubuntu-20.04
-    if: ${{ github.event_name == 'push'||github.event_name == 'merge' }}
+    if: ${{ (github.event_name == 'push'||github.event_name == 'merge') && !contains(toJson(join(github.event.commits.*.message, ' ')),'#skip') }}
     steps:
       - uses: actions/checkout@v3
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - name: commit messages
+        env:
+          COMMIT_MESSAGES: ${{ toJson(github.event.commits.*.message) }}
+        run: echo "$COMMIT_MESSAGES"
+      - name: Deploy
+        if: ${{ (github.event_name == 'push'||github.event_name == 'merge') && !contains(toJson(join(github.event.commits.*.message, ' ')),'#skip') }}
+        run: flyctl deploy --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+      - uses: actions/checkout@v3
       - name: Bump version and push tag
-        uses: anothrNick/github-tag-action@1.55.0 # https://github.com/anothrNick/github-tag-action
+        uses: anothrNick/github-tag-action@8c8163ef62cf9c4677c8e800f36270af27930f42 # https://github.com/anothrNick/github-tag-action
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # https://docs.github.com/en/actions/security-guides/automatic-token-authentication
           DEFAULT_BUMP: patch
