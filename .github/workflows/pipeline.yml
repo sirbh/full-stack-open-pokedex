@@ -27,8 +27,8 @@ jobs:
         uses: rjstone/discord-webhook-notify@v1
         if: failure()
         with:
-          severity: info
-          details: Build Succeeded!
+          severity: error
+          details: Error at ${{github.event.commits[0].url}}
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
       - name: Run Tests
         run: npm run test
