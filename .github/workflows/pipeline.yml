@@ -23,7 +23,7 @@ jobs:
         run: npm run eslint
       - name: Run Build
         run: npm run build
-      - name: Bild Success
+      - name: Build Failed
         uses: rjstone/discord-webhook-notify@v1
         if: failure()
         with:
@@ -62,3 +62,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # https://docs.github.com/en/actions/security-guides/automatic-token-authentication
           DEFAULT_BUMP: patch
+      - name: Deploy Success
+        uses: rjstone/discord-webhook-notify@v1
+        if: failure()
+        with:
+          severity: info
+          details: Deploy Succeeded!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
