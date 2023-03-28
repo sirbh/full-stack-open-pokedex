@@ -1,7 +1,7 @@
 FROM debian:bullseye as builder
 
 ENV PATH=/usr/local/node/bin:$PATH
-ARG NODE_VERSION=16.19.0
+ARG NODE_VERSION=16.19.1
 
 
 RUN apt-get update; apt install -y curl python-is-python3 pkg-config build-essential && \
