@@ -9,7 +9,7 @@ jobs:
   periodic_health_check:
     runs-on: ubuntu-20.04
     steps:
-      - name: Check the deployed service URL
+      - name: Check periodic health url
         uses: jtalk/url-health-check-action@v3
         with:
           url: https://pokedex-sirbh.fly.dev/periodic_health
